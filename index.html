@@ -262,8 +262,26 @@
   <div class="heart primary"></div>
 </div>
 
+
 <div class="text">
   <span id="animatedText" aria-live="polite"></span>
+</div>
+<div id="daysTogether" style="
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 120px);
+  transform: translate(-50%, 0);
+  z-index: 30;
+  color: #ff1c6d;
+  font-size: clamp(18px, 3vw, 32px);
+  font-family: 'Noto Sans', 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  font-weight: 700;
+  text-shadow: 0 2px 0 rgba(0,0,0,0.04), 0 0 12px rgba(255,50,120,0.15);
+  -webkit-text-stroke: 1.2px rgba(255,255,255,0.8);
+  text-align: center;
+  letter-spacing: 0.5px;
+  user-select: none;
+">
 </div>
 
 <script>
@@ -424,6 +442,14 @@
 
   // start sequence when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
+    // Update days together
+    const daysDiv = document.getElementById('daysTogether');
+    const startDate = new Date(2025, 6, 1); // July is month 6 (0-based)
+    const now = new Date();
+    const diffTime = now.setHours(0,0,0,0) - startDate.setHours(0,0,0,0);
+    const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    daysDiv.textContent = `How long we meet: ${days} day${days !== 1 ? 's' : ''}`;
+
     console.log('DOM loaded — starting text sequence loop');
     (async function loop() {
       await wait(600);
