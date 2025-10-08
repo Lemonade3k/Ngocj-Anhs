@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trọng Nhu ❤️ Ngọc Ánh</title>
+<!-- Load a Vietnamese-capable font -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;800&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    /* solid base color so edges don't show as bars */
+    background-color: #ff9fc4;
+  /* gradient applied via pseudo-element to avoid edge artifacts */
+  background-image: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Noto Sans', 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  }
+
+  /* full-viewport gradient layer to avoid tiling/edge bands */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #ffcee2 0%, #ffa7c8 40%, #ff7fab 80%);
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  /* Nhóm chứa hiệu ứng tim */
+  .heart-wrap {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    pointer-events: none;
+  }
+  :root { --heartColor: #ff4f87; }
+
+  .heart {
+    position: absolute;
+    width: 200px;
+    height: 180px;
+    background-color: var(--heartColor);
+    transform: rotate(-45deg) scale(1);
+    opacity: 1;
+  }
+
+  .heart::before,
+  .heart::after {
+    content: "";
+    position: absolute;
+    width: 200px;
+    height: 180px;
+    background-color: inherit; /* dùng cùng màu với .heart */
+    border-radius: 50%;
+  }
+  .heart::before {
+    top: -100px;
+    left: 0;
+  }
+  .heart::after {
+    left: 100px;
+    top: 0;
+  }
+
+  /* Nhịp tim nhẹ (một hình, đều màu) */
+  @keyframes beat {
+    0%, 100% { transform: rotate(-45deg) scale(1); }
+    40% { transform: rotate(-45deg) scale(1.06); }
+    60% { transform: rotate(-45deg) scale(0.98); }
+  }
+  /* Hypnotic ripple hearts: continuous expansion (linear) */
+  .heart.ripple {
+    transform: rotate(-45deg) scale(0);
+    opacity: 0.95; /* đậm hơn ban đầu */
+    animation: hypnotic 7s linear infinite; /* lâu hơn */
+    z-index: 1;
+    filter: saturate(1);
+  }
+  /* stagger the ripple hearts so they continuously spawn (evenly spaced across 7s) */
+  .heart.ripple:nth-child(1) { animation-delay: 0s; }
+  .heart.ripple:nth-child(2) { animation-delay: 1.75s; }
+  .heart.ripple:nth-child(3) { animation-delay: 3.5s; }
+  .heart.ripple:nth-child(4) { animation-delay: 5.25s; }
+
+  @keyframes hypnotic {
+    0% { transform: rotate(-45deg) scale(0); opacity: 0.95; }
+    35% { transform: rotate(-45deg) scale(0.95); opacity: 0.85; }
+    65% { transform: rotate(-45deg) scale(1.8); opacity: 0.55; }
+    90% { transform: rotate(-45deg) scale(2.6); opacity: 0.22; }
+    100% { transform: rotate(-45deg) scale(3.2); opacity: 0; }
+  }
+
+  /* Slow rotation of the whole group gives a hypnotic swirling effect */
+  @keyframes slow-rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* The central (primary) heart gently shrinks and returns (small subtle shrink) */
+  .heart.primary {
+    z-index: 6;
+    transform: rotate(-45deg) scale(1);
+    animation: shrink 6s ease-in-out infinite;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  }
+
+  @keyframes shrink {
+    0% { transform: rotate(-45deg) scale(1); }
+    50% { transform: rotate(-45deg) scale(0.92); }
+    100% { transform: rotate(-45deg) scale(1); }
+  }
+
+  /* (đã xoá các chấm trắng tĩnh - dùng bong bóng trái tim thay thế) */
+
+  /* Chữ ở giữa */
+  .text {
+    position: absolute; /* center absolutely to avoid layout clipping */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    color: #ff1c6d;
+    font-weight: 800;
+    font-size: clamp(28px, 6vw, 64px);
+    text-shadow: 0 0 18px rgba(255, 45, 117, 0.35);
+    display: block;
+    width: min(95vw, 1400px);
+    padding: 0 36px; /* breathing room so text doesn't touch edges */
+    box-sizing: border-box;
+    text-align: center;
+    overflow: visible;
+  }
+
+  .text span {
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+    opacity: 1;
+  }
+
+  #heartPart, #lovePart {
+    color: #ff3b7a;
+    font-size: 1.02em;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .text .pop {
+    color: #ff1c6d;
+  }
+
+  /* outline style to make names stand out */
+  .outline {
+    color: #ff0f66;
+    -webkit-text-stroke: 2px rgba(255,255,255,0.85);
+    text-shadow: 0 2px 0 rgba(0,0,0,0.06), 0 0 18px rgba(255, 100, 160, 0.25);
+    font-weight: 900;
+  }
+
+  /* Apply a subtle white stroke/outlining to all inline text so everything stands out */
+  .text span, #heartPart, #lovePart {
+    -webkit-text-stroke: 1.6px rgba(255,255,255,0.9);
+    text-shadow: 0 2px 0 rgba(0,0,0,0.04), 0 0 12px rgba(255,50,120,0.15);
+  }
+
+  .text span:nth-child(1) { animation-delay: 0s; }
+  .text span:nth-child(2) { animation-delay: 3s; }
+  .text span:nth-child(3) { animation-delay: 6s; }
+
+  @keyframes textSwap {
+    0%, 30% { opacity: 1; }
+    33.33%, 100% { opacity: 0; }
+  }
+
+  @keyframes fadeText {
+    0%, 100% { transform: scale(0.9); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+
+  /* small helpers for text effects */
+  .pop {
+    display: inline-block;
+    transform-origin: center;
+    animation: popIn 420ms ease-out forwards;
+  }
+  @keyframes popIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    60% { transform: scale(1.06); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .fade-away {
+    animation: fadeAway 420ms ease-in forwards;
+  }
+  @keyframes fadeAway {
+    to { opacity: 0; transform: translateY(-10px) scale(0.9); }
+  }
+
+  .typed-cursor {
+    display: inline-block;
+    width: 10px;
+    background: #fff7fb;
+    margin-left: 4px;
+    animation: blink 900ms steps(2) infinite;
+    height: 0.8em;
+    vertical-align: middle;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* Trái tim nhỏ bay lên (hiệu ứng sủi bọt) thay cho chấm tròn */
+  .bubble-heart {
+    position: absolute;
+    width: var(--bh-size, 12px);
+    height: var(--bh-size, 12px);
+    transform: translateY(0) rotate(-45deg) scale(1);
+    background: white;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.95;
+    animation-name: floatUp;
+    animation-timing-function: linear;
+  }
+
+  .bubble-heart::before,
+  .bubble-heart::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    border-radius: 50%;
+  }
+  .bubble-heart::before { top: -50%; left: 0; }
+  .bubble-heart::after { left: 50%; top: 0; }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(-45deg) scale(1); opacity: 1; }
+    60% { opacity: 0.9; }
+    100% { transform: translateY(-120vh) rotate(-45deg) scale(1.35); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="heart-wrap">
+  <div class="heart ripple"></div>
+  <div class="heart ripple"></div>
+  <div class="heart ripple"></div>
+  <div class="heart ripple"></div>
+  <div class="heart primary"></div>
+</div>
+
+<div class="text">
+  <span id="animatedText" aria-live="polite"></span>
+</div>
+
+<script>
+  // Tạo các trái tim bong bóng bay lên (thay cho chấm tròn)
+  // giảm số bong bóng và spawn bên trong vùng heart-wrap nhưng tránh chồng lên trái tim chính
+  const heartWrap = document.querySelector('.heart-wrap');
+  function randIn(min, max) { return Math.random() * (max - min) + min; }
+  const bubbleCount = 8;
+  function createBubbles() {
+    const wrapRect = heartWrap.getBoundingClientRect();
+    // defining a central exclusion circle so bubbles won't overlap primary heart
+    const cx = wrapRect.left + wrapRect.width / 2;
+    const cy = wrapRect.top + wrapRect.height / 2;
+    const exclusionR = Math.min(wrapRect.width, wrapRect.height) * 0.28; // vùng trung tâm an toàn
+
+    for (let i = 0; i < bubbleCount; i++) {
+      const b = document.createElement('div');
+      b.className = 'bubble-heart';
+      const size = Math.round(randIn(10, 18));
+      b.style.setProperty('--bh-size', size + 'px');
+      // spawn within heartWrap bounds (convert to viewport coords)
+      let x, y, dx, dy, dist;
+      let attempts = 0;
+      do {
+        x = randIn(wrapRect.left + wrapRect.width * 0.05, wrapRect.left + wrapRect.width * 0.95);
+        y = randIn(wrapRect.top + wrapRect.height * 0.6, wrapRect.top + wrapRect.height * 0.98);
+        dx = x - cx; dy = y - cy; dist = Math.sqrt(dx*dx + dy*dy);
+        attempts++;
+      } while (dist < exclusionR && attempts < 12);
+
+      // position relative to viewport
+      b.style.left = (x / window.innerWidth) * 100 + 'vw';
+      b.style.top = (y / window.innerHeight) * 100 + 'vh';
+
+      const dur = randIn(6, 12);
+      b.style.animationDuration = dur + 's';
+      b.style.animationDelay = randIn(0, 2) + 's';
+      // ensure bubbles are under the primary heart visually
+      b.style.zIndex = 4;
+      document.body.appendChild(b);
+      b.addEventListener('animationend', () => b.remove());
+    }
+  }
+  createBubbles();
+  // spawn fewer bubbles less often
+  setInterval(createBubbles, 4500);
+  
+  // --- Text animation sequence ---
+  const animatedText = document.getElementById('animatedText');
+
+  // helper: type text into an element with cursor
+  function typeText(targetEl, text, speed=120) {
+    return new Promise(resolve => {
+      targetEl.textContent = '';
+      const cursor = document.createElement('span');
+      cursor.className = 'typed-cursor';
+      targetEl.appendChild(cursor);
+      let i = 0;
+      function step() {
+        if (i < text.length) {
+          cursor.insertAdjacentText('beforebegin', text[i]);
+          i++;
+          setTimeout(step, speed + Math.random()*40 - 20);
+        } else {
+          cursor.remove();
+          resolve();
+        }
+      }
+      step();
+    });
+  }
+
+  // helper: type two texts in parallel (so both names appear simultaneously)
+  function typeBoth(elA, textA, elB, textB, speed=100) {
+    return new Promise(resolve => {
+      elA.textContent = '';
+      elB.textContent = '';
+      const cursorA = document.createElement('span'); cursorA.className = 'typed-cursor';
+      const cursorB = document.createElement('span'); cursorB.className = 'typed-cursor';
+      elA.appendChild(cursorA);
+      elB.appendChild(cursorB);
+      const maxLen = Math.max(textA.length, textB.length);
+      let i = 0;
+      function step() {
+        if (i < maxLen) {
+          if (i < textA.length) cursorA.insertAdjacentText('beforebegin', textA[i]);
+          if (i < textB.length) cursorB.insertAdjacentText('beforebegin', textB[i]);
+          i++;
+          setTimeout(step, speed + Math.random()*40 - 20);
+        } else {
+          cursorA.remove(); cursorB.remove();
+          resolve();
+        }
+      }
+      step();
+    });
+  }
+
+  // helper: simple promise timeout
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+
+  async function runTextSequence() {
+    // Start with: I <3 U (rendered as three spans so we can animate parts)
+    animatedText.innerHTML = '';
+  const left = document.createElement('span'); left.id = 'leftPart'; left.textContent = 'I ';
+  const heart = document.createElement('span'); heart.id = 'heartPart'; heart.innerHTML = '\u2665'; heart.style.margin = '0 6px';
+  const right = document.createElement('span'); right.id = 'rightPart'; right.textContent = ' U';
+    animatedText.appendChild(left);
+    animatedText.appendChild(heart);
+    animatedText.appendChild(right);
+
+    // small pause
+    await wait(800);
+
+    // 1) Explode <3 into 'Love' (heart fades/expands then replaced)
+    heart.classList.add('pop');
+    heart.style.transition = 'transform 360ms ease-out, opacity 360ms';
+    heart.style.transform = 'scale(1.2)';
+    await wait(360);
+    // fade away heart
+    heart.classList.add('fade-away');
+    await wait(220);
+    heart.remove();
+    // insert Love with pop
+    const love = document.createElement('span'); love.id = 'lovePart'; love.textContent = 'Love'; love.className = 'pop'; love.style.margin = '0 6px';
+    animatedText.insertBefore(love, right);
+    await wait(800);
+
+    // 2) Turn 'U' into 'You' by typing the rest
+    // remove leading space in right
+    right.textContent = '';
+    await typeText(right, 'You', 140);
+    await wait(700);
+
+  // 3) Replace both names but type them simultaneously for a romantic feel
+  left.classList.add('fade-away');
+  right.classList.add('fade-away');
+  await wait(350);
+  left.remove(); right.remove();
+  const loveNode = document.getElementById('lovePart') || document.querySelector('#heartPart') || animatedText.firstChild;
+  // create placeholders for typed names
+  const leftPlaceholder = document.createElement('span'); leftPlaceholder.id = 'leftName'; leftPlaceholder.style.marginRight = '8px';
+  const rightPlaceholder = document.createElement('span'); rightPlaceholder.id = 'rightName'; rightPlaceholder.style.marginLeft = '8px';
+  animatedText.insertBefore(leftPlaceholder, loveNode);
+  animatedText.appendChild(rightPlaceholder);
+  // type both names in parallel so they appear together
+  await typeBoth(leftPlaceholder, 'Trọng Nhu', rightPlaceholder, 'Ngọc Ánh', 120);
+  leftPlaceholder.classList.add('outline');
+  rightPlaceholder.classList.add('outline');
+
+    // final gentle glow
+    animatedText.style.transition = 'text-shadow 600ms ease-in-out, transform 600ms ease-in-out';
+    animatedText.style.transform = 'scale(1.02)';
+    animatedText.style.textShadow = '0 0 26px rgba(255, 90, 150, 0.45)';
+    await wait(1600);
+    // keep final state
+  }
+
+  // start sequence when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded — starting text sequence loop');
+    (async function loop() {
+      await wait(600);
+      while (true) {
+        try { await runTextSequence(); } catch(e) { console.error(e); }
+        await wait(1000); // 1s gap between repeats
+      }
+    })();
+  });
+</script>
+
+</body>
+</html>
